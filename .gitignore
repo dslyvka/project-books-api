@@ -1,5 +1,5 @@
 node_modules/
-.env
+
 # Logs
 logs
 *.log
@@ -71,7 +71,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
