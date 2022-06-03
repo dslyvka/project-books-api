@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { joiSchema } = require('../../models/auth');
-const register = require('../../controllers/auth/register');
+const { joiSchema } = require('../../models/userSchema');
+const { register } = require('../../controllers/auth/register');
 
 router.post('/signup', async (req, res) => {
   const validationResult = joiSchema.validate(req.body);

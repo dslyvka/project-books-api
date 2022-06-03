@@ -6,9 +6,6 @@ dotenv.config();
 
 const authRouter = require('./routes/API/auth');
 
-const dotenv = require('dotenv');
-dotenv.config();
-
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
