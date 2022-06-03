@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Joi = require('joi');
 // const gravatar = require('gravatar');
+
 const userSchema = Schema(
   {
     name: {
@@ -22,7 +24,6 @@ const userSchema = Schema(
       required: [true, 'Set password for user'],
       minlength: 6,
     },
-
     token: {
       type: String,
       default: null,
@@ -43,6 +44,13 @@ userSchema.methods.comparePassword = function (password) {
 //   };
 //   return jwt.sign(payload, SECRET_KEY);
 // };
+
+const joiSchema = Joi.object({
+  name: Joi.string().min(4).required(),
+  email: Joi.string().required(),
+  password: Joi.string().min(6).required(),
+});
+
 const User = model('user', userSchema);
 
-module.exports = User;
+module.exports = { User, joiSchema };
