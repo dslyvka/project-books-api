@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { joiSchema } = require('../../models/userSchema');
-const { register } = require('../../controllers/auth/register');
+const { register, logoutUser, currentUser } = require('../../controllers/auth');
+const tryCatchMiddleware = require('../../middlewares/tryCatch');
+const auth = require('../../middlewares/auth');
 
 router.post('/signup', async (req, res) => {
   const validationResult = joiSchema.validate(req.body);
@@ -22,5 +24,8 @@ router.post('/signup', async (req, res) => {
     },
   });
 });
+
+router.get('/current', auth, tryCatchMiddleware(currentUser)); // Роут для получения текущего юзера
+router.post('/logout', auth, tryCatchMiddleware(logoutUser)); // Роут для выхода
 
 module.exports = router;
