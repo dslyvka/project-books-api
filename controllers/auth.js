@@ -1,6 +1,6 @@
-const { User } = require('../../models/userSchema');
-const { findUserById } = require('../../services/usersServices');
-const { logout } = require('../../services/authServices');
+const { User } = require('../models/userSchema');
+const { findUserById } = require('../services/usersServices');
+const { logout } = require('../services/authServices');
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
