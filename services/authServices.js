@@ -1,9 +1,11 @@
 const { findUserByEmail, updateToken } = require('./usersServices');
 const jwt = require('jsonwebtoken'); // библиотека для создания токенов
 const { SECRET_KEY } = process.env; // секрет для подписи токена
+
 // Вход юзера
 const login = async ({ email, password }) => {
   const user = await findUserByEmail(email);
+
   const isValidPassword = await user.comparePassword(password);
 
   // Если юзера нет или пароль не валидный - null вместо токена

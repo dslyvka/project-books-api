@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { joiSchema } = require('../../models/userSchema');
-const { register, logoutUser, currentUser } = require('../../controllers/auth');
+const validation = require('../../middlewares/validation');
+const {
+  register,
+  loginUser,
+  logoutUser,
+  currentUser,
+} = require('../../controllers/auth');
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const auth = require('../../middlewares/auth');
 
@@ -24,7 +30,7 @@ router.post('/signup', async (req, res) => {
     },
   });
 });
-
+router.post('/login', validation(joiSchema), tryCatchMiddleware(loginUser)); // Роут для входа юзера
 router.get('/current', auth, tryCatchMiddleware(currentUser)); // Роут для получения текущего юзера
 router.post('/logout', auth, tryCatchMiddleware(logoutUser)); // Роут для выхода
 
