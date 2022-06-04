@@ -4,35 +4,19 @@ const Joi = require('joi');
 
 const userSchema = Schema(
   {
-    // Имя пользователя может содержать в себе пробелы
-    // Имя пользователя может начинаться только с буквы или цифры
-    // Имя пользователя может содержать от 3 до 100 знаков включительно
     name: {
       type: String,
       required: [true, 'Name is required'],
       min: [3, 'Too short name'],
       max: [100, 'Too long name'],
     },
-    // Поле имеет обязательно содержать знак "@" / "точку"
-    // Минимальное количество символов в поле - 10 (включительно), Максимальное количество символов в поле - 63 (включительно)
-    // Перед символом "@" должено стоять минимум 2 символа
-    // Поле может содержать дефисы, причем дефис не может находиться в начале или в конце Emaile
-    // Поле Emaile пользователя может включать в себя латиницу, цифры, знаки
-    // Настроить индексы в базе.
     email: {
       type: String,
       required: [true, 'Email is required'],
-      match: [
-        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-        'Please fill a valid email address',
-      ],
       min: [10, 'Too short email'],
       max: [63, 'Too long email'],
       unique: true,
     },
-    //  Поле Password не может начинаться дефисом или точкой
-    // Поле Password не может содержать пробелы
-    // Поле Password может содержать от 5 до 30 символов (включительно)
     password: {
       type: String,
       required: [true, 'Set password for user'],
@@ -73,6 +57,24 @@ const joiSchema = Joi.object({
     .required(),
 });
 
+const joiSignUpSchema = Joi.object({
+  name: Joi.string()
+    .pattern(/^[a-zA-Z0-9а-яА-ЯёЁ]+(?:\s+[a-zA-Z0-9-а-яА-ЯЁё]+){1,2}$/)
+    .min(3)
+    .max(100)
+    .required(),
+  email: Joi.string()
+    .min(10)
+    .max(63)
+    .required()
+    .pattern(
+      /^[^-.#!?,%$&^*()][\w-.#!?,%$&^*()]{2,}@([\w-]+\.)+[\w-.][^-.,!?#$]{1,4}$/,
+    ),
+  password: Joi.string()
+    .required()
+    .pattern(/^[^.-](?=.*[\w\d])([a-zA-Z0-9@$!._,%*\-#?&]{5,30})$/),
+});
+
 const User = model('user', userSchema);
 
-module.exports = { User, joiSchema };
+module.exports = { User, joiSchema, joiSignUpSchema };
