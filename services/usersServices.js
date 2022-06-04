@@ -1,4 +1,11 @@
-const User = require('../models/userSchema');
+const { User } = require('../models/userSchema');
+
+// Создает нового юзера в базе
+const createUser = async body => {
+  const user = await new User({ ...body });
+  user.setPassword(body.password);
+  return user.save();
+};
 // Находит юзера в базе по id
 const findUserById = async id => {
   const user = await User.findById(id);
@@ -17,8 +24,8 @@ const updateToken = async (id, token) => {
 };
 
 module.exports = {
+  createUser,
   findUserById,
   findUserByEmail,
   updateToken,
- 
 };

@@ -52,18 +52,25 @@ userSchema.methods.setPassword = function (password) {
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
-// userSchema.methods.createToken = function () {
-//   const { SECRET_KEY } = process.env;
-//   const payload = {
-//     _id: this._id,
-//   };
-//   return jwt.sign(payload, SECRET_KEY);
-// };
 
 const joiSchema = Joi.object({
-  name: Joi.string().min(4).max(100).required(),
-  email: Joi.string().min(10).max(63).required(),
-  password: Joi.string().min(5).max(30).required(),
+  name: Joi.string().min(4).max(100),
+  email: Joi.string()
+    .min(10)
+    .max(63)
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ['com', 'net', 'org', 'ua', 'ru', 'gov', 'ca'] },
+    })
+    .pattern(
+      /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
+    )
+    .required(),
+  password: Joi.string()
+    .min(5)
+    .max(30)
+    .pattern(/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{5,})\S$/)
+    .required(),
 });
 
 const User = model('user', userSchema);
