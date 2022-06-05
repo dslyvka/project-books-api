@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { signupJoiSchema, loginJoiSchema } = require('../../models/userSchema');
+const { joiSchema, joiSignUpSchema } = require('../../models/userSchema');
+
 const validation = require('../../middlewares/validation');
 const {
   register,
@@ -12,7 +13,7 @@ const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const auth = require('../../middlewares/auth');
 
 router.post('/signup', async (req, res) => {
-  const validationResult = signupJoiSchema.validate(req.body);
+  const validationResult = joiSignUpSchema.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({
       status: '400 Bad Request',
@@ -30,11 +31,7 @@ router.post('/signup', async (req, res) => {
     },
   });
 });
-router.post(
-  '/login',
-  validation(loginJoiSchema),
-  tryCatchMiddleware(loginUser),
-); // Роут для входа юзера
+router.post('/login', validation(joiSchema), tryCatchMiddleware(loginUser)); // Роут для входа юзера
 router.get('/current', auth, tryCatchMiddleware(currentUser)); // Роут для получения текущего юзера
 router.post('/logout', auth, tryCatchMiddleware(logoutUser)); // Роут для выхода
 

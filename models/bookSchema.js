@@ -49,15 +49,19 @@ const booksSchema = Schema(
 );
 
 const Book = model('book', booksSchema);
+
 //  Схема валидации создания контакта
 const addBookJoiSchema = Joi.object({
   title: Joi.string().alphanum().min(1).max(60).required(),
   autor: Joi.string().alphanum().min(1).max(50).required(),
   year: Joi.string().min(1).max(4).required(),
   pages: Joi.string().max(4).required(),
-  // rating: Joi.number().max(5),
-  // review: Joi.string().min(2).max(1000),
-  // status: Joi.string().valueOf('already', 'reading', 'going'),
+  status: Joi.string().valueOf('already', 'reading', 'going'),
 });
+
+// const bookReviewJoiSchema = Joi.object({
+//   rating: Joi.number().max(5),
+//   review: Joi.string().min(2).max(1000),
+// });
 
 module.exports = { Book, addBookJoiSchema };

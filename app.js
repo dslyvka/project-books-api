@@ -18,7 +18,7 @@ app.use(express.json());
 app.use('/api/users', authRouter);
 app.use('/api/books', booksRouter);
 
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
