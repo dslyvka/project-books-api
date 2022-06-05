@@ -1,0 +1,267 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "2.0.2",
+        "title": "Swagger test",
+        "description": "Showing off swagger-ui-express",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:3001"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Authorization endpoints"
+        },
+        {
+            "name": "Books",
+            "description": "Books endpoints"
+        }
+    ],
+    "paths": {
+        "/users/signup": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User registration",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegistrationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RegistrationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User login",
+                "parameters": [],
+                "requestBody": {
+                    "description": "login's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Email or password is wrong",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User logout",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "content": {}
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/users/current": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Current user",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RegistrationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RegistrationRequest": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "User's name",
+                        "example": "Mango123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "qwerty123"
+                    }
+                }
+            },
+            "RegistrationResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "User's name",
+                        "example": "Mango123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "qwerty123"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "description": "User's token"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "User's name",
+                                "example": "Mango123"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
