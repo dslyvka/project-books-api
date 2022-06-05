@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { joiSchema, joiSignUpSchema } = require('../../models/userSchema');
+
 const validation = require('../../middlewares/validation');
 const {
   register,
