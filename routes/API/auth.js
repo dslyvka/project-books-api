@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { joiSchema } = require('../../models/userSchema');
+const { joiSchema, joiSignUpSchema } = require('../../models/userSchema');
 const validation = require('../../middlewares/validation');
 const {
   register,
@@ -12,7 +12,7 @@ const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const auth = require('../../middlewares/auth');
 
 router.post('/signup', async (req, res) => {
-  const validationResult = joiSchema.validate(req.body);
+  const validationResult = joiSignUpSchema.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({
       status: '400 Bad Request',
