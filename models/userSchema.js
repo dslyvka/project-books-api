@@ -9,12 +9,20 @@ const userSchema = Schema(
       required: [true, 'Name is required'],
       min: [3, 'Too short name'],
       max: [100, 'Too long name'],
+      match: [
+        /^[^\s~!@#$%^&*()][\w\d\s!@#$%^&*()]{3,100}$/,
+        'Please fill a valid name',
+      ],
     },
     email: {
       type: String,
       required: [true, 'Email is required'],
       min: [10, 'Too short email'],
       max: [63, 'Too long email'],
+      match: [
+        /^[^-.#!?,%$&^*()][\w-.#!?,%$&^*()]{2,}@([\w-]+\.)+[\w-.][^-.,!?#$]{1,4}$/,
+        'Please fill a valid email address',
+      ],
       unique: true,
     },
     password: {
@@ -30,6 +38,7 @@ const userSchema = Schema(
   },
   { versionKey: false, timestamps: true },
 );
+
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(5));
 };
@@ -38,28 +47,21 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 const joiSchema = Joi.object({
-  name: Joi.string().min(4).max(100),
   email: Joi.string()
     .min(10)
     .max(63)
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'org', 'ua', 'ru', 'gov', 'ca'] },
-    })
+    .required()
     .pattern(
-      /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
-    )
-    .required(),
+      /^[^-.#!?,%$&^*()][\w-.#!?,%$&^*()]+[^-.#!?,%$&^*()]@([\w-]+\.)+[\w-.][^-.,!?#$]{1,4}$/, // обязательно наличие точки и @, минимум 2 символа до @, может содержать знаки, но не в начале или в конце
+    ),
   password: Joi.string()
-    .min(5)
-    .max(30)
-    .pattern(/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{5,})\S$/)
-    .required(),
+    .required()
+    .pattern(/^[^.-](?=.*[\w\d])([a-zA-Z0-9@$!_,%*\-.#?&]{5,30})$/), // минимум и максимум знаков, отсутствие пробелов, может содержать знаки, но не может начинаться с точки или тире
 });
 
 const joiSignUpSchema = Joi.object({
   name: Joi.string()
-    .pattern(/^[a-zA-Z0-9а-яА-ЯёЁ]+(?:\s+[a-zA-Z0-9-а-яА-ЯЁё]+){1,2}$/)
+    .pattern(/^[^\s~!@#$%^&*()][\w\d\s!@#$%^&*()]{3,100}$/)
     .min(3)
     .max(100)
     .required(),
@@ -68,11 +70,11 @@ const joiSignUpSchema = Joi.object({
     .max(63)
     .required()
     .pattern(
-      /^[^-.#!?,%$&^*()][\w-.#!?,%$&^*()]{2,}@([\w-]+\.)+[\w-.][^-.,!?#$]{1,4}$/,
+      /^[^-.#!?,%$&^*()][\w-.#!?,%$&^*()]+[^-.#!?,%$&^*()]@([\w-]+\.)+[\w-.][^-.,!?#$]{1,4}$/,
     ),
   password: Joi.string()
     .required()
-    .pattern(/^[^.-](?=.*[\w\d])([a-zA-Z0-9@$!._,%*\-#?&]{5,30})$/),
+    .pattern(/^[^.-](?=.*[\w\d])([a-zA-Z0-9@$!_,%*\-.#?&]{5,30})$/),
 });
 
 const User = model('user', userSchema);
