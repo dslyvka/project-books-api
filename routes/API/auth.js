@@ -8,9 +8,8 @@ const {
   loginUser,
   logoutUser,
   currentUser,
-  googleAuth,
-  googleRedirect,
 } = require('../../controllers/auth');
+const { googleAuth, googleRedirect } = require('../../controllers/googleAuth');
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const auth = require('../../middlewares/auth');
 
