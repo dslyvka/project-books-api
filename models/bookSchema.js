@@ -27,12 +27,15 @@ const booksSchema = Schema(
     },
     rating: {
       type: Number,
+      min: 1,
       max: 5,
+      default: null,
     },
     review: {
       type: String,
       minlength: [2, 'Too short review '],
       maxlength: [1000, 'Too long review '],
+      default: null,
     },
     status: {
       type: String,
@@ -59,9 +62,17 @@ const addBookJoiSchema = Joi.object({
   status: Joi.string().valueOf('already', 'reading', 'going'),
 });
 
-// const bookReviewJoiSchema = Joi.object({
-//   rating: Joi.number().max(5),
-//   review: Joi.string().min(2).max(1000),
-// });
+const bookReviewJoiSchema = Joi.object({
+  rating: Joi.string().max(5).required(),
+  review: Joi.string().min(2).max(1000),
+});
+const bookStatusJoiSchema = Joi.object({
+  status: Joi.string().valueOf('already', 'reading', 'going').required(),
+});
 
-module.exports = { Book, addBookJoiSchema };
+module.exports = {
+  Book,
+  addBookJoiSchema,
+  bookReviewJoiSchema,
+  bookStatusJoiSchema,
+};

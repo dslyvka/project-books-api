@@ -3,9 +3,18 @@ const router = express.Router();
 
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const validation = require('../../middlewares/validation');
-const { addBooks, getBooks } = require('../../controllers/book');
+const {
+  addBooks,
+  getBooks,
+  booksReview,
+  updateBookStatus,
+} = require('../../controllers/book');
 const auth = require('../../middlewares/auth');
-const { addBookJoiSchema } = require('../../models/bookSchema');
+const {
+  addBookJoiSchema,
+  bookReviewJoiSchema,
+  bookStatusJoiSchema,
+} = require('../../models/bookSchema');
 
 // Роут для создания книги
 router.post(
@@ -17,11 +26,19 @@ router.post(
 // Роут для списка всех книг
 router.get('/', auth, tryCatchMiddleware(getBooks));
 
-// Роут для создания отзывы
-// router.post(
-//   '/review',
-//   auth,
-//   validation(bookReviewJoiSchema),
-//   tryCatchMiddleware(booksReview),
-// );
+// Роут для создания отзыва
+router.patch(
+  '/:bookId',
+  auth,
+  validation(bookReviewJoiSchema),
+  tryCatchMiddleware(booksReview),
+);
+// Роут для обновления статуса книги
+router.patch(
+  '/:bookId/status',
+  auth,
+  validation(bookStatusJoiSchema),
+  tryCatchMiddleware(updateBookStatus),
+); //  Роут статуса контакта
+
 module.exports = router;

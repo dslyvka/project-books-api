@@ -1,7 +1,8 @@
 const {
   addBook,
-  addReview,
   getAllBooks,
+  updateBookReviewById,
+  updateBookStatusById,
 } = require('../services/booksServices');
 
 // Создание книг
@@ -16,7 +17,7 @@ const addBooks = async (req, res) => {
   res.status(201).json({ book, status: 'success' });
 };
 
-// Получение всех книг
+// Получение книг по статусу
 
 const getBooks = async (req, res) => {
   const userId = req.user._id;
@@ -28,13 +29,33 @@ const getBooks = async (req, res) => {
 
 // Создание рецензии
 const booksReview = async (req, res) => {
-  const body = req.body;
+  const { bookId } = req.params;
+  const { review, rating } = req.body;
   const userId = req.user._id;
-  if (!body.review && !body.rating) {
-    return res.status(400).json({ message: 'leave out the review' });
+
+  if (!rating) {
+    return res.status(400).json({ message: 'missing required field  rating' });
   }
-  const review = await addReview(userId, body);
-  res.status(201).json({ review, status: 'success' });
+  const book = await updateBookReviewById(userId, bookId, review, rating);
+  if (!book) {
+    return res.status(404).json({ message: 'Not found' });
+  }
+  res.status(200).json({ book, status: 'success' });
 };
 
-module.exports = { addBooks, booksReview, getBooks };
+const updateBookStatus = async (req, res) => {
+  const { bookId } = req.params;
+  const body = req.body;
+  const userId = req.user._id;
+
+  if (!body) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+  const book = await updateBookStatusById(userId, bookId, body);
+  if (!book) {
+    return res.status(404).json({ message: 'Not found' });
+  }
+  res.status(200).json({ book, status: 'success' });
+};
+
+module.exports = { addBooks, booksReview, getBooks, updateBookStatus };

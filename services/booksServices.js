@@ -6,7 +6,7 @@ const addBook = async (userId, body) => {
   return newBook;
 };
 
-// Получает все книги
+// Получает книги по статусу
 
 const getAllBooks = async (userId, queryString) => {
   const { page = 1, limit = 5, status, sort } = queryString;
@@ -19,12 +19,39 @@ const getAllBooks = async (userId, queryString) => {
     .skip(skip)
     .limit(parseInt(limit))
     .sort({ sort });
-  return books;
-};
-// Создает рецензию
-const addReview = async (userId, body) => {
-  const newReview = await Book.create({ ...body, owner: userId });
-  return newReview;
+
+  if (!books.length) {
+    throw new Error('Not books');
+  }
+  const going = books.filter(item => item.status === 'going');
+  const reading = books.filter(item => item.status === 'reading');
+  const already = books.filter(item => item.status === 'already');
+
+  return { going, reading, already };
 };
 
-module.exports = { addBook, addReview, getAllBooks };
+// Обновляет рецензию
+const updateBookReviewById = async (userId, bookId, review, rating) => {
+  const updatedBook = await Book.findByIdAndUpdate(
+    { _id: bookId, owner: userId },
+    { review, rating },
+    { new: true },
+  ).populate({ path: 'owner', select: 'email' });
+  return updatedBook;
+};
+
+const updateBookStatusById = async (userId, bookId, body) => {
+  const updatedBook = await Book.findByIdAndUpdate(
+    { _id: bookId, owner: userId },
+    { ...body },
+    { new: true },
+  ).populate({ path: 'owner', select: 'email' });
+  return updatedBook;
+};
+
+module.exports = {
+  addBook,
+  getAllBooks,
+  updateBookReviewById,
+  updateBookStatusById,
+};
