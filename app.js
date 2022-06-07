@@ -8,6 +8,7 @@ dotenv.config();
 
 const authRouter = require('./routes/API/auth');
 const booksRouter = require('./routes/API/books');
+const googleAuthRouter = require('./routes/API/auth');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/users', authRouter);
+app.use('/auth', googleAuthRouter);
 app.use('/api/books', booksRouter);
 
 app.use((_, res) => {

@@ -20,13 +20,6 @@ const register = async (req, res) => {
 
   const result = await createUser(req.body);
   return result;
-
-  // const result = await User.create({
-  //   name,
-  //   email,
-  //   password,
-  // });
-  // return result;
 };
 
 //  Вход юзера

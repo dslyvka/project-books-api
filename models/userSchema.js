@@ -80,3 +80,6 @@ const joiSignUpSchema = Joi.object({
 const User = model('user', userSchema);
 
 module.exports = { User, joiSchema, joiSignUpSchema };
+
+// GOOGLE_CLIENT_ID=609794465594-7vn9e4pi8k3iark4pfraj1tfh4tdav6o.apps.googleusercontent.com;
+// GOOGLE_CLIENT_SECRET=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;

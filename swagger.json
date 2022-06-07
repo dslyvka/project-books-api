@@ -18,6 +18,9 @@
     "servers": [
         {
             "url": "http://localhost:3001"
+        },
+        {
+            "url": "https://project-books-api.herokuapp.com"
         }
     ],
     "tags": [

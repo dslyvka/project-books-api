@@ -9,6 +9,7 @@ const {
   logoutUser,
   currentUser,
 } = require('../../controllers/auth');
+const { googleAuth, googleRedirect } = require('../../controllers/googleAuth');
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const auth = require('../../middlewares/auth');
 
@@ -34,5 +35,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', validation(joiSchema), tryCatchMiddleware(loginUser)); // Роут для входа юзера
 router.get('/current', auth, tryCatchMiddleware(currentUser)); // Роут для получения текущего юзера
 router.post('/logout', auth, tryCatchMiddleware(logoutUser)); // Роут для выхода
+router.get('/google', tryCatchMiddleware(googleAuth));
+router.get('/google-redirect', tryCatchMiddleware(googleRedirect));
 
 module.exports = router;
