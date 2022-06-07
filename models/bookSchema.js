@@ -7,23 +7,33 @@ const booksSchema = Schema(
       type: String,
       required: [true, 'Set title '],
       minlength: [1, 'Too short title '],
-      maxlength: [60, 'Too long title '],
+      maxlength: [50, 'Too long title '],
+      match: [
+        /^[^-\s]([a-zа-яФ-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/,
+        'Please fill a valid title',
+      ],
     },
     autor: {
       type: String,
       required: [true, 'Set autor '],
       minlength: [1, 'Too short autor '],
       maxlength: [50, 'Too long autor '],
+      match: [
+        /^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/,
+        'Please fill a valid author',
+      ],
     },
     year: {
       type: String,
       required: true,
       maxlength: [4, 'Set correct year'],
+      match: [/^[^03456789]([0-9]{1,4})$/, 'Please fill a valid year'],
     },
     pages: {
       type: String,
       required: true,
       maxlength: [4, 'Set correct quantity of pages'],
+      match: [/^([0-9]{1,4})$/, 'Please fill a valid number of pages'],
     },
     rating: {
       type: Number,
@@ -33,7 +43,7 @@ const booksSchema = Schema(
     },
     review: {
       type: String,
-      minlength: [2, 'Too short review '],
+      minlength: [1, 'Too short review '],
       maxlength: [1000, 'Too long review '],
       default: null,
     },
@@ -55,10 +65,25 @@ const Book = model('book', booksSchema);
 
 //  Схема валидации создания контакта
 const addBookJoiSchema = Joi.object({
-  title: Joi.string().alphanum().min(1).max(60).required(),
-  autor: Joi.string().alphanum().min(1).max(50).required(),
-  year: Joi.string().min(1).max(4).required(),
-  pages: Joi.string().max(4).required(),
+  title: Joi.string()
+    .pattern(/^[^-\s]([a-zа-яФ-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/)
+    .min(1)
+    .max(50)
+    .required(),
+  autor: Joi.string()
+    .pattern(/^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/)
+    .min(1)
+    .max(50)
+    .required(),
+  year: Joi.string()
+    .pattern(/^[^03456789]([0-9]{1,4})$/)
+    .min(1)
+    .max(4)
+    .required(),
+  pages: Joi.string()
+    .pattern(/^([0-9]{1,4})$/)
+    .max(4)
+    .required(),
   status: Joi.string().valueOf('already', 'reading', 'going'),
 });
 
