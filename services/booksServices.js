@@ -40,6 +40,7 @@ const updateBookReviewById = async (userId, bookId, review, rating) => {
   return updatedBook;
 };
 
+// Обновляет cтатус книги
 const updateBookStatusById = async (userId, bookId, body) => {
   const updatedBook = await Book.findByIdAndUpdate(
     { _id: bookId, owner: userId },
@@ -49,9 +50,19 @@ const updateBookStatusById = async (userId, bookId, body) => {
   return updatedBook;
 };
 
+// Удаляет книгу
+const removeBook = async (userId, bookId) => {
+  const book = await Book.findByIdAndRemove({
+    _id: bookId,
+    owner: userId,
+  });
+  return book;
+};
+
 module.exports = {
   addBook,
   getAllBooks,
   updateBookReviewById,
   updateBookStatusById,
+  removeBook,
 };

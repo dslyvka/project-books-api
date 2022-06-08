@@ -8,6 +8,7 @@ const {
   getBooks,
   booksReview,
   updateBookStatus,
+  deleteBook,
 } = require('../../controllers/book');
 const auth = require('../../middlewares/auth');
 const {
@@ -39,6 +40,10 @@ router.patch(
   auth,
   validation(bookStatusJoiSchema),
   tryCatchMiddleware(updateBookStatus),
-); //  Роут статуса контакта
+);
+
+// Роут для удаления книги
+
+router.delete('/:bookId', auth, tryCatchMiddleware(deleteBook));
 
 module.exports = router;
