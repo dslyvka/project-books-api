@@ -11,8 +11,8 @@ const addTrainings = async (req, res) => {
   ) {
     return res.status(400).json({ message: 'missing required name field' });
   }
-  const planning = await addTraining(userId, body);
-  res.status(201).json({ planning, status: 'success' });
+  const training = await addTraining(userId, body);
+  res.status(201).json({ training, status: 'success' });
 };
 
 module.exports = { addTrainings };
