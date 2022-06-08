@@ -9,7 +9,7 @@ const addBook = async (userId, body) => {
 // Получает книги по статусу
 
 const getAllBooks = async (userId, queryString) => {
-  const { page = 1, limit = 5, status, sort } = queryString;
+  const { page = 1, limit = 5, status } = queryString;
   const skip = (page - 1) * limit;
 
   const query = status ? { owner: userId, status } : { owner: userId };
@@ -17,8 +17,7 @@ const getAllBooks = async (userId, queryString) => {
   const books = await Book.find(query)
     .select('-owner -createdAt -updatedAt')
     .skip(skip)
-    .limit(parseInt(limit))
-    .sort({ sort });
+    .limit(parseInt(limit));
 
   if (!books.length) {
     throw new Error('Not books');
