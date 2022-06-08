@@ -39,12 +39,17 @@ const trainingSchema = Schema(
     },
     books: {
       type: [booksSchema],
-      required: [true, 'Books array is required'],
+      required: [true, 'Books  is required'],
     },
 
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
+    },
+    status: {
+      type: String,
+      enum: ['already', 'reading', 'going'],
+      default: 'reading',
     },
   },
   { timestamps: true },
