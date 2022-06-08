@@ -19,6 +19,19 @@ const booksSchema = Schema(
   },
   { _id: false },
 );
+const resultSchema = new Schema(
+  {
+    date: {
+      type: Date,
+      required: [true, 'Result date is required'],
+    },
+    totalPages: {
+      type: Number,
+      required: [true, 'Point reading pages result is required'],
+    },
+  },
+  { _id: false },
+);
 const trainingSchema = Schema(
   {
     startDate: {
@@ -50,6 +63,10 @@ const trainingSchema = Schema(
       type: String,
       enum: ['already', 'reading', 'going'],
       default: 'reading',
+    },
+    results: {
+      type: [resultSchema],
+      required: [true, 'results is required'],
     },
   },
   { timestamps: true },
