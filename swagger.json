@@ -29,6 +29,10 @@
             "description": "Authorization endpoints"
         },
         {
+            "name": "GoogleAuth",
+            "description": "Google authorization endpoints"
+        },
+        {
             "name": "Books",
             "description": "Books endpoints"
         }
@@ -171,6 +175,106 @@
                     }
                 }
             }
+        },
+        "/auth/google": {
+            "get": {
+                "tags": [
+                    "GoogleAuth"
+                ],
+                "summary": "Google authorization",
+                "parameters": []
+            }
+        },
+        "/books/": {
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Add book",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Book's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get book by status",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "type": "string",
+                        "description": "query page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "type": "string",
+                        "description": "number of books on one page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "required": true,
+                        "type": "string",
+                        "description": "book's status"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookStatusResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -254,6 +358,93 @@
                                 "description": "User's email",
                                 "format": "email"
                             }
+                        }
+                    }
+                }
+            },
+            "BookRequest": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "author",
+                    "year",
+                    "pages"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    }
+                }
+            },
+            "BookResponse": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    }
+                }
+            },
+            "BookStatusResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "description": "Book's name",
+                            "example": "About mango"
+                        },
+                        "author": {
+                            "type": "string",
+                            "description": "Book's author",
+                            "example": "Mango"
+                        },
+                        "year": {
+                            "type": "string",
+                            "description": "Book's year",
+                            "example": "1993"
+                        },
+                        "pages": {
+                            "type": "string",
+                            "description": "Number of pages",
+                            "example": "123"
+                        },
+                        "status": {
+                            "type": "uncertain"
                         }
                     }
                 }
