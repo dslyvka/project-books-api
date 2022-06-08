@@ -9,7 +9,7 @@ const addBook = async (userId, body) => {
 // Получает книги по статусу
 
 const getAllBooks = async (userId, queryString) => {
-  const { page = 1, limit = 5, status, sort } = queryString;
+  const { page = 1, limit = 5, status } = queryString;
   const skip = (page - 1) * limit;
 
   const query = status ? { owner: userId, status } : { owner: userId };
@@ -17,8 +17,7 @@ const getAllBooks = async (userId, queryString) => {
   const books = await Book.find(query)
     .select('-owner -createdAt -updatedAt')
     .skip(skip)
-    .limit(parseInt(limit))
-    .sort({ sort });
+    .limit(parseInt(limit));
 
   if (!books.length) {
     throw new Error('Not books');
@@ -40,6 +39,7 @@ const updateBookReviewById = async (userId, bookId, review, rating) => {
   return updatedBook;
 };
 
+// Обновляет cтатус книги
 const updateBookStatusById = async (userId, bookId, body) => {
   const updatedBook = await Book.findByIdAndUpdate(
     { _id: bookId, owner: userId },
@@ -49,9 +49,19 @@ const updateBookStatusById = async (userId, bookId, body) => {
   return updatedBook;
 };
 
+// Удаляет книгу
+const removeBook = async (userId, bookId) => {
+  const book = await Book.findByIdAndRemove({
+    _id: bookId,
+    owner: userId,
+  });
+  return book;
+};
+
 module.exports = {
   addBook,
   getAllBooks,
   updateBookReviewById,
   updateBookStatusById,
+  removeBook,
 };
