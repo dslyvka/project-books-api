@@ -9,9 +9,18 @@ const addTraining = async (userId, body) => {
     readedPages: 0,
     results: [{ statisticDate, statisticResult: 0 }],
     owner: userId,
-  });
+  }).populate({ path: 'owner', select: 'email' });
 
   return newTrainig;
 };
 
-module.exports = { addTraining };
+const updateReadedPages = async (userId, trainingId, readedPages) => {
+  const updatedReadedPages = await Training.findByIdAndUpdate(
+    { _id: trainingId, owner: userId },
+    { readedPages },
+    { new: true },
+  ).populate({ path: 'owner', select: 'email' });
+  return updatedReadedPages;
+};
+
+module.exports = { addTraining, updateReadedPages };

@@ -22,7 +22,7 @@ const booksSchema = Schema(
 const statisticSchema = new Schema(
   {
     statisticDate: {
-      type: Date,
+      type: Date('dd-MM-yyyy'),
       required: [true, 'Result date is required'],
     },
     statisticResult: {
@@ -35,11 +35,11 @@ const statisticSchema = new Schema(
 const trainingSchema = Schema(
   {
     startDate: {
-      type: Date,
-      required: [true, 'Start Date is required'],
+      type: { type: Date('dd-MM-yyyy'), default: Date.now },
+      // required: [true, 'Start Date is required'],
     },
     endDate: {
-      type: Date,
+      type: Date('dd-MM-yyyy'),
       required: [true, 'End Date is required'],
     },
     readedPages: {
@@ -89,7 +89,10 @@ const trainingJoiSchema = Joi.object({
   status: Joi.string().valueOf('already', 'reading', 'going'),
   results: Joi.array().items(statistic),
 });
+const addReadedPagesJoiSchema = Joi.object({
+  readedPages: Joi.number().min(1).required(),
+});
 
 const Training = model('training', trainingSchema);
 
-module.exports = { Training, trainingJoiSchema };
+module.exports = { Training, trainingJoiSchema, addReadedPagesJoiSchema };
