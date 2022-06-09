@@ -29,6 +29,10 @@
             "description": "Authorization endpoints"
         },
         {
+            "name": "GoogleAuth",
+            "description": "Google authorization endpoints"
+        },
+        {
             "name": "Books",
             "description": "Books endpoints"
         }
@@ -171,6 +175,212 @@
                     }
                 }
             }
+        },
+        "/auth/google": {
+            "get": {
+                "tags": [
+                    "GoogleAuth"
+                ],
+                "summary": "Google authorization",
+                "parameters": []
+            }
+        },
+        "/books/": {
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Add book",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Book's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get book by status",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "type": "string",
+                        "description": "query page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "type": "string",
+                        "description": "number of books on one page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "required": true,
+                        "type": "string",
+                        "description": "book's status"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookStatusResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/books/:bookId/:bookId": {
+            "patch": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Add book's review",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "bookId",
+                        "required": true,
+                        "type": "string",
+                        "description": "book's id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Review's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReviewRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReviewResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/books/:bookId/status": {
+            "patch": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Update book's status",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "bookId",
+                        "required": true,
+                        "type": "string",
+                        "description": "book's id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Status object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StatusRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -255,6 +465,254 @@
                                 "format": "email"
                             }
                         }
+                    }
+                }
+            },
+            "BookRequest": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "author",
+                    "year",
+                    "pages"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    }
+                }
+            },
+            "BookResponse": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "book's rating"
+                    },
+                    "review": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Book's review"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Book's status",
+                        "example": "going"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "Book's id",
+                        "example": "6543hfj34"
+                    }
+                }
+            },
+            "BookStatusResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "description": "Book's id",
+                            "example": "6543hfj34"
+                        },
+                        "title": {
+                            "type": "string",
+                            "description": "Book's name",
+                            "example": "About mango"
+                        },
+                        "author": {
+                            "type": "string",
+                            "description": "Book's author",
+                            "example": "Mango"
+                        },
+                        "year": {
+                            "type": "string",
+                            "description": "Book's year",
+                            "example": "1993"
+                        },
+                        "pages": {
+                            "type": "string",
+                            "description": "Number of pages",
+                            "example": "123"
+                        },
+                        "rating": {
+                            "type": "integer",
+                            "description": "book's rating",
+                            "example": "4"
+                        },
+                        "review": {
+                            "type": "string",
+                            "description": "Book's review",
+                            "example": "Good"
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": "Book's status",
+                            "example": "already"
+                        }
+                    }
+                }
+            },
+            "ReviewRequest": {
+                "type": "object",
+                "required": [
+                    "rating",
+                    "review"
+                ],
+                "properties": {
+                    "rating": {
+                        "type": "integer",
+                        "description": "Book's rating",
+                        "example": 4
+                    },
+                    "review": {
+                        "type": "string",
+                        "description": "Book's review",
+                        "example": "Pretty good"
+                    }
+                }
+            },
+            "ReviewResponse": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "description": "book's rating",
+                        "example": "4"
+                    },
+                    "review": {
+                        "type": "string",
+                        "description": "Book's review",
+                        "example": "Pretty good"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Book's status",
+                        "example": "going"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "Book's id",
+                        "example": "6543hfj34"
+                    }
+                }
+            },
+            "StatusRequest": {
+                "type": "object",
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "Status": {
+                        "type": "string",
+                        "description": "Book's status",
+                        "example": "already"
+                    }
+                }
+            },
+            "StatusResponse": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Book's name",
+                        "example": "About mango"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "Book's author",
+                        "example": "Mango"
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "Book's year",
+                        "example": "1993"
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "Number of pages",
+                        "example": "123"
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "book's rating",
+                        "example": "4"
+                    },
+                    "review": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Book's review",
+                        "example": "Pretty good"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Book's status",
+                        "example": "already"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "Book's id",
+                        "example": "6543hfj34"
                     }
                 }
             }
