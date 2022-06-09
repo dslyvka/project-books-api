@@ -28,7 +28,7 @@ router.get('/', auth, tryCatchMiddleware(getBooks));
 
 // Роут для создания отзыва
 router.patch(
-  '/:bookId',
+  '/:bookId/:bookId',
   auth,
   validation(bookReviewJoiSchema),
   tryCatchMiddleware(booksReview),
