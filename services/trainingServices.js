@@ -14,4 +14,28 @@ const addTraining = async (userId, body) => {
   return newTrainig;
 };
 
-module.exports = { addTraining };
+const updateReadedPages = async (userId, trainingId, readedPages) => {
+  const updatedReadedPages = await Training.findByIdAndUpdate(
+    { _id: trainingId, owner: userId },
+    { readedPages },
+    { new: true },
+  ).populate({ path: 'owner', select: 'email' });
+  return updatedReadedPages;
+};
+
+// Находит тренировку в базе по id
+const findTrainingById = async id => {
+  const training = await Training.findById(id);
+  return training;
+};
+// Находит тренировку в базе по полю owner и полю status
+const findTrainingByOwnerAndStatus = async (userId, status) => {
+  const training = await Training.findOne({ owner: userId, status });
+  return training;
+};
+module.exports = {
+  addTraining,
+  updateReadedPages,
+  findTrainingById,
+  findTrainingByOwnerAndStatus,
+};

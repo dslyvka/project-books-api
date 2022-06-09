@@ -36,8 +36,9 @@ const trainingSchema = Schema(
   {
     startDate: {
       type: Date,
-      required: [true, 'Start Date is required'],
+      required: [true, 'Start date is required'],
     },
+
     endDate: {
       type: Date,
       required: [true, 'End Date is required'],
@@ -57,8 +58,8 @@ const trainingSchema = Schema(
 
     status: {
       type: String,
-      enum: ['already', 'reading', 'going'],
-      default: 'reading',
+      enum: ['active', 'done'],
+      default: 'active',
     },
     results: {
       type: [statisticSchema],
@@ -66,7 +67,7 @@ const trainingSchema = Schema(
     },
     owner: {
       type: SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: 'user',
     },
   },
   { versionKey: false, timestamps: true },
@@ -86,10 +87,13 @@ const trainingJoiSchema = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
   books: Joi.array().items(books),
-  status: Joi.string().valueOf('already', 'reading', 'going'),
+  status: Joi.string().valueOf('active', 'done'),
   results: Joi.array().items(statistic),
+});
+const addReadedPagesJoiSchema = Joi.object({
+  readedPages: Joi.number().min(1).required(),
 });
 
 const Training = model('training', trainingSchema);
 
-module.exports = { Training, trainingJoiSchema };
+module.exports = { Training, trainingJoiSchema, addReadedPagesJoiSchema };

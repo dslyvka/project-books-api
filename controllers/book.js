@@ -10,7 +10,7 @@ const {
 const addBooks = async (req, res) => {
   const body = req.body;
   const userId = req.user._id;
-  if (!body.title && !body.autor && !body.year && !body.pages) {
+  if (!body.title && !body.author && !body.year && !body.pages) {
     return res.status(400).json({ message: 'missing required name field' });
   }
   const book = await addBook(userId, body);
