@@ -276,7 +276,7 @@
                 }
             }
         },
-        "/books/:bookId/:bookId": {
+        "/books/:bookId": {
             "patch": {
                 "tags": [
                     "Books"
