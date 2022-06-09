@@ -1,16 +1,21 @@
 const {
   addTraining,
   updateReadedPages,
-  // findTrainingByOwnerAndStatus,
+  findTrainingByOwnerAndStatus,
 } = require('../services/trainingServices');
 
 const addTrainings = async (req, res) => {
   const body = req.body;
   const userId = req.user._id;
-
-  if (!body.startDate && !body.endDate && !body.totalPages) {
+  const activTraining = await findTrainingByOwnerAndStatus(userId, 'active');
+  if (activTraining) {
+    return res.status(409).json({ message: 'Training in use' });
+  } else if (!body.startDate && !body.endDate && !body.totalPages) {
     return res.status(400).json({ message: 'missing required name field' });
   }
+  // if (!body.startDate && !body.endDate && !body.totalPages) {
+  //   return res.status(400).json({ message: 'missing required name field' });
+  // }
   const training = await addTraining(userId, body);
   res.status(201).json({ training, status: 'success' });
 };
