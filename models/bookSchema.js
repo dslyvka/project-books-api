@@ -13,7 +13,7 @@ const booksSchema = Schema(
         'Please fill a valid title',
       ],
     },
-    autor: {
+    author: {
       type: String,
       required: [true, 'Set autor '],
       minlength: [1, 'Too short autor '],
@@ -70,7 +70,7 @@ const addBookJoiSchema = Joi.object({
     .min(1)
     .max(50)
     .required(),
-  autor: Joi.string()
+  author: Joi.string()
     .pattern(/^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/)
     .min(1)
     .max(50)
