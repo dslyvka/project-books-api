@@ -4,7 +4,7 @@ const auth = require('../../middlewares/auth');
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const validation = require('../../middlewares/validation');
 const { trainingJoiSchema } = require('../../models/trainingSchema');
-const { addTrainings } = require('../../controllers/training');
+const { addTrainings, getAllTrainings } = require('../../controllers/training');
 
 router.post(
   '/',
@@ -12,5 +12,9 @@ router.post(
   validation(trainingJoiSchema),
   tryCatchMiddleware(addTrainings),
 );
+
+// Роут для получения всех тренировок
+
+router.get('/', auth, tryCatchMiddleware(getAllTrainings));
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { addTraining } = require('../services/trainingServices');
+const { addTraining, getTraining } = require('../services/trainingServices');
 
 const addTrainings = async (req, res) => {
   const body = req.body;
@@ -15,4 +15,10 @@ const addTrainings = async (req, res) => {
   res.status(201).json({ training, status: 'success' });
 };
 
-module.exports = { addTrainings };
+const getAllTrainings = async (req, res) => {
+  const userId = req.user._id;
+  const training = await getTraining(userId);
+  res.status(200).json({ training, status: 'success' });
+};
+
+module.exports = { addTrainings, getAllTrainings };

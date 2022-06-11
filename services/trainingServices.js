@@ -14,4 +14,9 @@ const addTraining = async (userId, body) => {
   return newTrainig;
 };
 
-module.exports = { addTraining };
+const getTraining = async userId => {
+  const trainings = await Training.find({ owner: userId });
+  return trainings;
+};
+
+module.exports = { addTraining, getTraining };
