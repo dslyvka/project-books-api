@@ -1,7 +1,11 @@
+
+
 const {
   addTraining,
   updateReadedPages,
   findTrainingByOwnerAndStatus,
+  getTraining
+    
 } = require('../services/trainingServices');
 
 const addTrainings = async (req, res) => {
@@ -20,6 +24,15 @@ const addTrainings = async (req, res) => {
   res.status(201).json({ training, status: 'success' });
 };
 
+
+const getAllTrainings = async (req, res) => {
+  const userId = req.user._id;
+  const training = await getTraining(userId);
+  res.status(200).json({ training, status: 'success' });
+};
+
+
+
 const addReadedPages = async (req, res) => {
   const userId = req.user._id;
   const { readedPages } = req.body;
@@ -29,4 +42,5 @@ const addReadedPages = async (req, res) => {
   res.status(201).json({ result, status: 'success' });
 };
 
-module.exports = { addTrainings, addReadedPages };
+module.exports = { addTrainings, addReadedPages,getAllTrainings };
+

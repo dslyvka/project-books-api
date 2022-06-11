@@ -14,6 +14,14 @@ const addTraining = async (userId, body) => {
   return newTrainig;
 };
 
+
+const getTraining = async userId => {
+  const trainings = await Training.find({ owner: userId });
+  return trainings;
+};
+
+
+
 const updateReadedPages = async (userId, trainingId, readedPages) => {
   const updatedReadedPages = await Training.findByIdAndUpdate(
     { _id: trainingId, owner: userId },
@@ -36,6 +44,8 @@ const findTrainingByOwnerAndStatus = async (userId, status) => {
 module.exports = {
   addTraining,
   updateReadedPages,
+  getTraining, 
   findTrainingById,
   findTrainingByOwnerAndStatus,
 };
+
