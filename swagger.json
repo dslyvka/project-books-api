@@ -35,6 +35,10 @@
         {
             "name": "Books",
             "description": "Books endpoints"
+        },
+        {
+            "name": "Trainings",
+            "description": "Training's endpoints"
         }
     ],
     "paths": {
@@ -276,7 +280,7 @@
                 }
             }
         },
-        "/books/:bookId": {
+        "/books/:bookId/review": {
             "patch": {
                 "tags": [
                     "Books"
@@ -377,6 +381,87 @@
                     },
                     "404": {
                         "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/books/:bookId": {
+            "delete": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Delete book by id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "bookId",
+                        "required": true,
+                        "type": "string",
+                        "description": "book's id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Book was deleted",
+                        "content": {}
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/trainings/": {
+            "post": {
+                "tags": [
+                    "Trainings"
+                ],
+                "summary": "Start training",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Trainings's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TrainingsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TrainingsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "missing required name field",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Training in use",
                         "content": {}
                     }
                 }
@@ -715,13 +800,15 @@
                         "example": "6543hfj34"
                     }
                 }
-            }
-        },
-        "securitySchemes": {
-            "Bearer": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
+            },
+            "TrainingsRequest": {},
+            "TrainingsResponse": {},
+            "securitySchemes": {
+                "Bearer": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT"
+                }
             }
         }
     }

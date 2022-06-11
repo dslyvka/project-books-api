@@ -15,9 +15,9 @@ const booksSchema = Schema(
     },
     author: {
       type: String,
-      required: [true, 'Set autor '],
-      minlength: [1, 'Too short autor '],
-      maxlength: [50, 'Too long autor '],
+      required: [true, 'Set author '],
+      minlength: [1, 'Too short author '],
+      maxlength: [50, 'Too long author '],
       match: [
         /^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/,
         'Please fill a valid author',
