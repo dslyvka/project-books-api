@@ -5,11 +5,11 @@ const booksSchema = Schema(
   {
     id: {
       type: SchemaTypes.ObjectId,
-      required: [true, 'Book id is required'],
+      required: [true, "Book's id is required"],
     },
     pages: {
       type: Number,
-      required: [true, 'Book pages is required'],
+      required: [true, "Book's pages are required"],
     },
     status: {
       type: String,
@@ -53,7 +53,7 @@ const trainingSchema = Schema(
     },
     books: {
       type: [booksSchema],
-      required: [true, 'Books  is required'],
+      required: [true, 'Books are required'],
     },
 
     status: {

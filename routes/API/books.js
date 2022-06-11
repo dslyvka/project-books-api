@@ -29,7 +29,7 @@ router.get('/', auth, tryCatchMiddleware(getBooks));
 
 // Роут для создания отзыва
 router.patch(
-  '/:bookId/:bookId',
+  '/:bookId/review',
   auth,
   validation(bookReviewJoiSchema),
   tryCatchMiddleware(booksReview),

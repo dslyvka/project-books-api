@@ -66,7 +66,7 @@ const deleteBook = async (res, req) => {
   if (!result) {
     return res.status(404).json({ message: 'Not found' });
   }
-  res.status(200).json({ result, message: 'book deleted' });
+  res.status(200).json({ result, message: 'book was deleted' });
 };
 module.exports = {
   addBooks,
