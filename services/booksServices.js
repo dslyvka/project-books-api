@@ -56,6 +56,17 @@ const updateBookStatusById = async (userId, bookId, body) => {
   ).populate({ path: 'owner', select: 'email' });
   return updatedBook;
 };
+// Находит книгу в базе по id
+const findBookById = async id => {
+  const book = await Book.findById(id);
+  return book;
+};
+
+// Находит книгу в базе по полю owner и полю status
+const findBookByOwnerAndStatus = async (userId, status) => {
+  const book = await Book.findOne({ owner: userId, status });
+  return book;
+};
 
 // Удаляет книгу
 const removeBook = async (userId, bookId) => {
@@ -69,8 +80,10 @@ const removeBook = async (userId, bookId) => {
 module.exports = {
   addBook,
   getAllBooks,
+  findBookById,
   updateBookReviewById,
   updateBookStatusById,
   findBookByTitle,
+  findBookByOwnerAndStatus,
   removeBook,
 };
