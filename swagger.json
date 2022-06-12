@@ -957,19 +957,6 @@
                         "description": "Status of training",
                         "example": "active"
                     },
-                    "results": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "statisticDate": {
-                                    "type": "date",
-                                    "description": "Date",
-                                    "example": "2022-06-15T00:00:00.000Z"
-                                }
-                            }
-                        }
-                    },
                     "owner": {
                         "type": "string",
                         "description": "user's id",
@@ -1051,19 +1038,6 @@
                         "description": "Status of training",
                         "example": "active"
                     },
-                    "results": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "statisticDate": {
-                                    "type": "date",
-                                    "description": "Date",
-                                    "example": "2022-06-15T00:00:00.000Z"
-                                }
-                            }
-                        }
-                    },
                     "owner": {
                         "type": "object",
                         "properties": {
@@ -1136,19 +1110,6 @@
                         "type": "string",
                         "description": "Status of training",
                         "example": "active"
-                    },
-                    "results": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "statisticDate": {
-                                    "type": "date",
-                                    "description": "Date",
-                                    "example": "2022-06-15T00:00:00.000Z"
-                                }
-                            }
-                        }
                     },
                     "owner": {
                         "type": "string",
