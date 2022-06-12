@@ -19,19 +19,7 @@ const booksSchema = Schema(
   },
   { versionKey: false, _id: false },
 );
-const statisticSchema = new Schema(
-  {
-    statisticDate: {
-      type: Date,
-      required: [true, 'Result date is required'],
-    },
-    statisticResult: {
-      type: Number,
-      required: [true],
-    },
-  },
-  { versionKey: false, _id: false },
-);
+
 const trainingSchema = Schema(
   {
     startDate: {
@@ -61,10 +49,7 @@ const trainingSchema = Schema(
       enum: ['active', 'done'],
       default: 'active',
     },
-    results: {
-      type: [statisticSchema],
-      required: [true, 'results is required'],
-    },
+    
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
@@ -73,10 +58,7 @@ const trainingSchema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-const statistic = Joi.object({
-  statisticDate: Joi.date().required(),
-  statisticResult: Joi.number(),
-});
+
 
 const books = Joi.object({
   id: Joi.string().required(),
@@ -88,7 +70,7 @@ const trainingJoiSchema = Joi.object({
   endDate: Joi.date().required(),
   books: Joi.array().items(books),
   status: Joi.string().valueOf('active', 'done'),
-  results: Joi.array().items(statistic),
+ 
 });
 const addReadedPagesJoiSchema = Joi.object({
   readedPages: Joi.number().min(1).required(),

@@ -1,26 +1,22 @@
 const { Training } = require('../models/trainingSchema');
 
 const addTraining = async (userId, body) => {
-  const { startDate: statisticDate, books } = body;
+  const { books } = body;
   const totalPages = books.reduce((acc, book) => acc + book.pages, 0);
   const newTrainig = await Training.create({
     ...body,
     totalPages,
     readedPages: 0,
-    results: [{ statisticDate, statisticResult: 0 }],
     owner: userId,
   });
 
   return newTrainig;
 };
 
-
 const getTraining = async userId => {
   const trainings = await Training.find({ owner: userId });
   return trainings;
 };
-
-
 
 const updateReadedPages = async (userId, trainingId, readedPages) => {
   const updatedReadedPages = await Training.findByIdAndUpdate(
@@ -44,8 +40,7 @@ const findTrainingByOwnerAndStatus = async (userId, status) => {
 module.exports = {
   addTraining,
   updateReadedPages,
-  getTraining, 
+  getTraining,
   findTrainingById,
   findTrainingByOwnerAndStatus,
 };
-
