@@ -9,10 +9,20 @@ const addBook = async (userId, body) => {
 // Получает книги по статусу
 
 const getAllBooks = async (userId, queryString) => {
-  const { page = 1, limit = 5, status } = queryString;
+  const { page = 1, limit, status } = queryString;
   const skip = (page - 1) * limit;
 
   const query = status ? { owner: userId, status } : { owner: userId };
+
+  if (!limit) {
+    const books = await Book.find(query)
+      .select('-owner -createdAt -updatedAt')
+      .populate({
+        path: 'owner',
+        select: 'email',
+      });
+    return books;
+  }
 
   const books = await Book.find(query)
     .select('-owner -createdAt -updatedAt')
@@ -40,12 +50,10 @@ const updateBookReviewById = async (userId, bookId, review, rating) => {
 };
 // Находит книгу по title
 
-
-
 const findBookByTitle = async (userId, title) => {
   const book = await Book.findOne({ owner: userId, title });
   return book;
- };
+};
 
 // Обновляет cтатус книги
 const updateBookStatusById = async (userId, bookId, body) => {
