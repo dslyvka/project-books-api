@@ -21,7 +21,11 @@ const getAllBooks = async (userId, queryString) => {
         path: 'owner',
         select: 'email',
       });
-    return books;
+    const going = books.filter(item => item.status === 'going');
+    const reading = books.filter(item => item.status === 'reading');
+    const already = books.filter(item => item.status === 'already');
+
+    return { going, reading, already };
   }
 
   const books = await Book.find(query)
