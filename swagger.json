@@ -465,6 +465,34 @@
                         "content": {}
                     }
                 }
+            },
+            "get": {
+                "tags": [
+                    "Trainings"
+                ],
+                "summary": "Get all trainings",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTrainingsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "missing required name field",
+                        "content": {}
+                    }
+                }
             }
         },
         "/trainings/:trainingId": {
@@ -1050,6 +1078,82 @@
                                 "format": "email"
                             }
                         }
+                    }
+                }
+            },
+            "GetTrainingsResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Id of training",
+                        "example": "7834y3uif7ty387thf"
+                    },
+                    "startDate": {
+                        "type": "date",
+                        "description": "Start of training",
+                        "example": "2022-06-15T00:00:00.000Z"
+                    },
+                    "endDate": {
+                        "type": "date",
+                        "description": "End of training",
+                        "example": "2022-06-23T00:00:00.000Z"
+                    },
+                    "readedPages": {
+                        "type": "integer",
+                        "description": "Book's pages were read",
+                        "example": "30"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "description": "Book's pages",
+                        "example": "50"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Book's id",
+                                    "example": "74368734djhd"
+                                },
+                                "pages": {
+                                    "type": "number",
+                                    "description": "Number of book's pages",
+                                    "example": "50"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Book's status",
+                                    "example": "going"
+                                }
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of training",
+                        "example": "active"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "statisticDate": {
+                                    "type": "date",
+                                    "description": "Date",
+                                    "example": "2022-06-15T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "string",
+                        "description": "User's id",
+                        "example": "36453yrgyefgeh43"
                     }
                 }
             },
