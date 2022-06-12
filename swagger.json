@@ -465,6 +465,83 @@
                         "content": {}
                     }
                 }
+            },
+            "get": {
+                "tags": [
+                    "Trainings"
+                ],
+                "summary": "Get all trainings",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTrainingsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "missing required name field",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/trainings/:trainingId": {
+            "patch": {
+                "tags": [
+                    "Trainings"
+                ],
+                "summary": "Update training",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "trainingId",
+                        "required": true,
+                        "type": "string",
+                        "description": "trainings's id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Add read pages",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdPagesRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdPagesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {}
+                    }
+                }
             }
         }
     },
@@ -801,8 +878,285 @@
                     }
                 }
             },
-            "TrainingsRequest": {},
-            "TrainingsResponse": {},
+            "TrainingsRequest": {
+                "type": "object",
+                "required": [
+                    "startDate",
+                    "endDate",
+                    "books"
+                ],
+                "properties": {
+                    "startDate": {
+                        "type": "date",
+                        "description": "Start of training",
+                        "example": "2022-06-15"
+                    },
+                    "endDate": {
+                        "type": "date",
+                        "description": "End of training",
+                        "example": "2022-06-23"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Book's id",
+                                    "example": "74368734djhd"
+                                },
+                                "pages": {
+                                    "type": "number",
+                                    "description": "Number of book's pages",
+                                    "example": "50"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "TrainingsResponse": {
+                "type": "object",
+                "properties": {
+                    "startDate": {
+                        "type": "date",
+                        "description": "Start of training",
+                        "example": "2022-06-15T00:00:00.000Z"
+                    },
+                    "endDate": {
+                        "type": "date",
+                        "description": "End of training",
+                        "example": "2022-06-23T00:00:00.000Z"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Book's id",
+                                    "example": "74368734djhd"
+                                },
+                                "pages": {
+                                    "type": "number",
+                                    "description": "Number of book's pages",
+                                    "example": "50"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Book's status",
+                                    "example": "going"
+                                }
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of training",
+                        "example": "active"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "statisticDate": {
+                                    "type": "date",
+                                    "description": "Date",
+                                    "example": "2022-06-15T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "string",
+                        "description": "user's id",
+                        "example": "36453yrgyefgeh43"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "Id of training",
+                        "example": "7834y3uif7ty387thf"
+                    }
+                }
+            },
+            "UpdPagesRequest": {
+                "type": "object",
+                "required": [
+                    "readedPages"
+                ],
+                "properties": {
+                    "readedPages": {
+                        "type": "integer",
+                        "description": "Book's pages were read",
+                        "example": "30"
+                    }
+                }
+            },
+            "UpdPagesResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Id of training",
+                        "example": "7834y3uif7ty387thf"
+                    },
+                    "startDate": {
+                        "type": "date",
+                        "description": "Start of training",
+                        "example": "2022-06-15T00:00:00.000Z"
+                    },
+                    "endDate": {
+                        "type": "date",
+                        "description": "End of training",
+                        "example": "2022-06-23T00:00:00.000Z"
+                    },
+                    "readedPages": {
+                        "type": "integer",
+                        "description": "Book's pages were read",
+                        "example": "30"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "description": "Book's pages",
+                        "example": "50"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Book's id",
+                                    "example": "74368734djhd"
+                                },
+                                "pages": {
+                                    "type": "number",
+                                    "description": "Number of book's pages",
+                                    "example": "50"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Book's status",
+                                    "example": "going"
+                                }
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of training",
+                        "example": "active"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "statisticDate": {
+                                    "type": "date",
+                                    "description": "Date",
+                                    "example": "2022-06-15T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "description": "User's id",
+                                "example": "36453yrgyefgeh43"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email"
+                            }
+                        }
+                    }
+                }
+            },
+            "GetTrainingsResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Id of training",
+                        "example": "7834y3uif7ty387thf"
+                    },
+                    "startDate": {
+                        "type": "date",
+                        "description": "Start of training",
+                        "example": "2022-06-15T00:00:00.000Z"
+                    },
+                    "endDate": {
+                        "type": "date",
+                        "description": "End of training",
+                        "example": "2022-06-23T00:00:00.000Z"
+                    },
+                    "readedPages": {
+                        "type": "integer",
+                        "description": "Book's pages were read",
+                        "example": "30"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "description": "Book's pages",
+                        "example": "50"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Book's id",
+                                    "example": "74368734djhd"
+                                },
+                                "pages": {
+                                    "type": "number",
+                                    "description": "Number of book's pages",
+                                    "example": "50"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Book's status",
+                                    "example": "going"
+                                }
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of training",
+                        "example": "active"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "statisticDate": {
+                                    "type": "date",
+                                    "description": "Date",
+                                    "example": "2022-06-15T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "string",
+                        "description": "User's id",
+                        "example": "36453yrgyefgeh43"
+                    }
+                }
+            },
             "securitySchemes": {
                 "Bearer": {
                     "type": "http",

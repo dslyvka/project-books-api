@@ -9,7 +9,7 @@ const booksSchema = Schema(
       minlength: [1, 'Too short title '],
       maxlength: [50, 'Too long title '],
       match: [
-        /^[^-\s]([a-zа-яФ-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/,
+        /^[^-\s]([a-zа-яА-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/,
         'Please fill a valid title',
       ],
     },
@@ -19,7 +19,7 @@ const booksSchema = Schema(
       minlength: [1, 'Too short author '],
       maxlength: [50, 'Too long author '],
       match: [
-        /^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/,
+        /^[^-\s]([a-zа-яА-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/,
         'Please fill a valid author',
       ],
     },
@@ -66,12 +66,12 @@ const Book = model('book', booksSchema);
 //  Схема валидации создания контакта
 const addBookJoiSchema = Joi.object({
   title: Joi.string()
-    .pattern(/^[^-\s]([a-zа-яФ-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/)
+    .pattern(/^[^-\s]([a-zа-яА-ЯA-Z0-9@$!_\s,%*\-.#?&]{1,50})$/)
     .min(1)
     .max(50)
     .required(),
   author: Joi.string()
-    .pattern(/^[^-\s]([a-zа-яФ-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/)
+    .pattern(/^[^-\s]([a-zа-яА-ЯA-Z@$!_\s,%*\-.#?&]{1,50})$/)
     .min(1)
     .max(50)
     .required(),
