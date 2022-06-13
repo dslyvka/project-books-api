@@ -39,7 +39,7 @@ const findTrainingByOwnerAndStatus = async (userId, status) => {
   const training = await Training.findOne({ owner: userId, status });
   return training;
 };
-// Обно
+// Обновление стистики тренировки
 const updateStatistic = async (userId, statisticDate, statisticResult) => {
   const training = await findTrainingByOwnerAndStatus(userId, 'active');
   if (!training) throw new Error('Training not Found');
