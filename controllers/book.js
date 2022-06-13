@@ -68,7 +68,6 @@ const updateBookStatus = async (req, res) => {
 
 // Удаляет книгу
 const deleteBook = async (req, res) => {
-  console.log(req);
   const { bookId } = req.params;
   const userId = req.user._id;
   const result = await removeBook(userId, bookId);
