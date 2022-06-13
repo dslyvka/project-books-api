@@ -12,10 +12,7 @@ const addBooks = async (req, res) => {
   const body = req.body;
   const userId = req.user._id;
 
-
-
   if (!body.title && !body.author && !body.year && !body.pages) {
-
     return res.status(400).json({ message: 'missing required name field' });
   }
   const result = await findBookByTitle(userId, body.title);
@@ -70,7 +67,8 @@ const updateBookStatus = async (req, res) => {
 };
 
 // Удаляет книгу
-const deleteBook = async (res, req) => {
+const deleteBook = async (req, res) => {
+  console.log(req);
   const { bookId } = req.params;
   const userId = req.user._id;
   const result = await removeBook(userId, bookId);
