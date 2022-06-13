@@ -4,14 +4,19 @@ const auth = require('../../middlewares/auth');
 const tryCatchMiddleware = require('../../middlewares/tryCatch');
 const validation = require('../../middlewares/validation');
 
-
 const {
   trainingJoiSchema,
   addReadedPagesJoiSchema,
+  updateStatisticTrainingJoiSchema,
 } = require('../../models/trainingSchema');
-const { addTrainings, addReadedPages,getAllTrainings } = require('../../controllers/training');
+const {
+  addTrainings,
+  addReadedPages,
+  getAllTrainings,
+  updateTrainingStatistic,
+} = require('../../controllers/training');
 
-
+// Роут для добавления тренировки
 router.post(
   '/',
   auth,
@@ -19,12 +24,10 @@ router.post(
   tryCatchMiddleware(addTrainings),
 );
 
-
 // Роут для получения всех тренировок
-
 router.get('/', auth, tryCatchMiddleware(getAllTrainings));
 
-
+// Роут для обновления прочитанных страниц
 router.patch(
   '/:trainingId',
   auth,
@@ -32,5 +35,12 @@ router.patch(
   tryCatchMiddleware(addReadedPages),
 );
 
+// Роут для обновления статистики тренеровки
+router.patch(
+  '/',
+  auth,
+  validation(updateStatisticTrainingJoiSchema),
+  tryCatchMiddleware(updateTrainingStatistic),
+);
 
 module.exports = router;

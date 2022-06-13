@@ -94,7 +94,16 @@ const trainingJoiSchema = Joi.object({
 const addReadedPagesJoiSchema = Joi.object({
   readedPages: Joi.number().min(1).required(),
 });
+const updateStatisticTrainingJoiSchema = Joi.object({
+  statisticDate: Joi.date().required(),
+  statisticResult: Joi.number().min(1).required(),
+});
 
 const Training = model('training', trainingSchema);
 
-module.exports = { Training, trainingJoiSchema, addReadedPagesJoiSchema };
+module.exports = {
+  Training,
+  trainingJoiSchema,
+  addReadedPagesJoiSchema,
+  updateStatisticTrainingJoiSchema,
+};
