@@ -19,6 +19,19 @@ const booksSchema = Schema(
   },
   { versionKey: false, _id: false },
 );
+const statisticSchema = new Schema(
+  {
+    statisticDate: {
+      type: Date,
+      required: [true, 'Result date is required'],
+    },
+    statisticResult: {
+      type: Number,
+      required: [true],
+    },
+  },
+  { versionKey: false, _id: false },
+);
 
 const trainingSchema = Schema(
   {
@@ -49,7 +62,11 @@ const trainingSchema = Schema(
       enum: ['active', 'done'],
       default: 'active',
     },
-    
+
+    statistics: {
+      type: [statisticSchema],
+      required: [true, 'results is required'],
+    },
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
@@ -58,11 +75,13 @@ const trainingSchema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-
-
 const books = Joi.object({
   id: Joi.string().required(),
   pages: Joi.number().min(1).required(),
+});
+const statistic = Joi.object({
+  statisticDate: Joi.date().required(),
+  statisticResult: Joi.number(),
 });
 
 const trainingJoiSchema = Joi.object({
@@ -70,12 +89,21 @@ const trainingJoiSchema = Joi.object({
   endDate: Joi.date().required(),
   books: Joi.array().items(books),
   status: Joi.string().valueOf('active', 'done'),
- 
+  statistics: Joi.array().items(statistic),
 });
 const addReadedPagesJoiSchema = Joi.object({
   readedPages: Joi.number().min(1).required(),
 });
+const updateStatisticTrainingJoiSchema = Joi.object({
+  statisticDate: Joi.date().required(),
+  statisticResult: Joi.number().min(1).required(),
+});
 
 const Training = model('training', trainingSchema);
 
-module.exports = { Training, trainingJoiSchema, addReadedPagesJoiSchema };
+module.exports = {
+  Training,
+  trainingJoiSchema,
+  addReadedPagesJoiSchema,
+  updateStatisticTrainingJoiSchema,
+};
