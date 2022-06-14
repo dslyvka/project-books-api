@@ -14,7 +14,7 @@ const booksSchema = Schema(
     status: {
       type: String,
       enum: ['already', 'reading', 'going'],
-      default: 'going',
+      default: 'reading',
     },
   },
   { versionKey: false, _id: false },
