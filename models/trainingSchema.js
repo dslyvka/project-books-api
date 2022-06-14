@@ -23,7 +23,9 @@ const statisticSchema = new Schema(
   {
     statisticDate: {
       type: Date,
-      required: [true, 'Result date is required'],
+      default: new Date(),
+
+      // required: [true, ' statisticDate date is required'],
     },
     statisticResult: {
       type: Number,
@@ -59,7 +61,7 @@ const trainingSchema = Schema(
 
     status: {
       type: String,
-      enum: ['active', 'done'],
+      enum: ['active', 'done', 'canceled'],
       default: 'active',
     },
 
@@ -95,7 +97,7 @@ const addReadedPagesJoiSchema = Joi.object({
   readedPages: Joi.number().min(1).required(),
 });
 const updateStatisticTrainingJoiSchema = Joi.object({
-  statisticDate: Joi.date().required(),
+  statisticDate: Joi.date(),
   statisticResult: Joi.number().min(1).required(),
 });
 
