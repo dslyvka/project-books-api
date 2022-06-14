@@ -12,7 +12,7 @@ const {
 const {
   addTrainings,
   addReadedPages,
-  getAllTrainings,
+  getActivTraining,
   updateTrainingStatistic,
 } = require('../../controllers/training');
 
@@ -25,7 +25,7 @@ router.post(
 );
 
 // Роут для получения всех тренировок
-router.get('/', auth, tryCatchMiddleware(getAllTrainings));
+router.get('/', auth, tryCatchMiddleware(getActivTraining));
 
 // Роут для обновления прочитанных страниц
 router.patch(
