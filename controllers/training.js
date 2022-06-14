@@ -15,9 +15,7 @@ const addTrainings = async (req, res) => {
   } else if (!body.startDate && !body.endDate && !body.totalPages) {
     return res.status(400).json({ message: 'missing required name field' });
   }
-  // if (!body.startDate && !body.endDate && !body.totalPages) {
-  //   return res.status(400).json({ message: 'missing required name field' });
-  // }
+ 
   const training = await addTraining(userId, body);
   res.status(201).json({ training, status: 'success' });
 };

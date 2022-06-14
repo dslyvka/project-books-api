@@ -1,5 +1,5 @@
 const { Training } = require('../models/trainingSchema');
-const { changeBooksStatus, getBookIdsByStatus } = require('./booksServices');
+const { changeBooksStatus } = require('./booksServices');
 
 const addTraining = async (userId, body) => {
   const { startDate: statisticDate, books } = body;
@@ -50,33 +50,30 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
   statistics.push({ statisticDate, statisticResult });
 
   const bookIds = [];
-  console.log(bookIds);
 
-  // books.reduce((acc, book, id) => {
-  //   if (acc < books[id].pages) return acc - Infinity;
-  //   if (books[id].status !== 'already') {
-  //     bookIds.push(books[id]._id);
-  //     books[id].status = 'already';
-  //   }
-  //   return acc - books[id].pages;
-  // }, updatedReadedPages);
-
-  books.map((book, idx) => {
-    if (book[idx].status !== 'already') {
-      bookIds.push(books[idx]._id);
-      books[idx].status = 'already';
-    }
-    return bookIds;
-  });
+  if (updatedReadedPages >= totalPages) {
+    books.map(book => {
+      if (book.status !== 'already') {
+        bookIds.push(book.id);
+      }
+      return bookIds;
+    });
+  }
 
   if (bookIds.length) {
     await changeBooksStatus(userId, bookIds, 'already');
   }
 
-  if (endDate < statisticDate) {
-    const bookIds = getBookIdsByStatus(books, 'reading');
+  if (endDate <= statisticDate) {
+    const bookIdsArray = [];
+    books.map(book => {
+      if (book.status !== 'reading') {
+        bookIdsArray.push(book.id);
+      }
+      return bookIdsArray;
+    });
 
-    await changeBooksStatus(userId, bookIds, 'going');
+    await changeBooksStatus(userId, bookIdsArray, 'going');
   }
 
   if (updatedReadedPages >= totalPages) {

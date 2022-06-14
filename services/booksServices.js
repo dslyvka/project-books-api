@@ -86,11 +86,7 @@ const changeBooksStatus = async (userId, bookIdsArray, status) =>
     _id: { $in: bookIdsArray },
   }).updateMany({ status });
 
-const getBookIdsByStatus = (books, status) =>
-  books.reduce(
-    (acc, book) => (book.status === status ? [...acc, book._id] : acc),
-    [],
-  );
+
 
 // Удаляет книгу
 const removeBook = async (userId, bookId) => {
@@ -110,6 +106,5 @@ module.exports = {
   findBookByTitle,
   findBookByOwnerAndStatus,
   changeBooksStatus,
-  getBookIdsByStatus,
   removeBook,
 };
