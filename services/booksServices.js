@@ -80,6 +80,18 @@ const findBookByOwnerAndStatus = async (userId, status) => {
   return book;
 };
 
+const changeBooksStatus = async (userId, bookIdsArray, status) =>
+  await Book.find({
+    owner: userId,
+    _id: { $in: bookIdsArray },
+  }).updateMany({ status });
+
+const getBookIdsByStatus = (books, status) =>
+  books.reduce(
+    (acc, book) => (book.status === status ? [...acc, book._id] : acc),
+    [],
+  );
+
 // Удаляет книгу
 const removeBook = async (userId, bookId) => {
   const book = await Book.findByIdAndRemove({
@@ -97,5 +109,7 @@ module.exports = {
   updateBookStatusById,
   findBookByTitle,
   findBookByOwnerAndStatus,
+  changeBooksStatus,
+  getBookIdsByStatus,
   removeBook,
 };

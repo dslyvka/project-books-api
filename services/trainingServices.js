@@ -1,4 +1,5 @@
 const { Training } = require('../models/trainingSchema');
+const { changeBooksStatus, getBookIdsByStatus } = require('./booksServices');
 
 const addTraining = async (userId, body) => {
   const { startDate: statisticDate, books } = body;
@@ -44,9 +45,39 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
   const training = await findTrainingByOwnerAndStatus(userId, 'active');
   if (!training) throw new Error('Training not Found');
 
-  const { totalPages, statistics, readedPages } = training;
+  const { books, totalPages, statistics, readedPages, endDate } = training;
   const updatedReadedPages = readedPages + statisticResult;
   statistics.push({ statisticDate, statisticResult });
+
+  const bookIds = [];
+  console.log(bookIds);
+
+  // books.reduce((acc, book, id) => {
+  //   if (acc < books[id].pages) return acc - Infinity;
+  //   if (books[id].status !== 'already') {
+  //     bookIds.push(books[id]._id);
+  //     books[id].status = 'already';
+  //   }
+  //   return acc - books[id].pages;
+  // }, updatedReadedPages);
+
+  books.map((book, idx) => {
+    if (book[idx].status !== 'already') {
+      bookIds.push(books[idx]._id);
+      books[idx].status = 'already';
+    }
+    return bookIds;
+  });
+
+  if (bookIds.length) {
+    await changeBooksStatus(userId, bookIds, 'already');
+  }
+
+  if (endDate < statisticDate) {
+    const bookIds = getBookIdsByStatus(books, 'reading');
+
+    await changeBooksStatus(userId, bookIds, 'going');
+  }
 
   if (updatedReadedPages >= totalPages) {
     const doneTraining = await Training.findOneAndUpdate(
