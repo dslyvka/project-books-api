@@ -1,13 +1,26 @@
 const { Training } = require('../models/trainingSchema');
-const { changeBooksStatus } = require('./booksServices');
+const {
+  changeBooksStatus,
+  findBooksbyBookIdsArray,
+} = require('./booksServices');
 
 const addTraining = async (userId, body) => {
   const { startDate: statisticDate, books } = body;
-  const totalPages = books.reduce((acc, book) => acc + book.pages, 0);
+
   const bookIdsArray = books.map(book => book.id);
+  const booksFromBookIdsArray = await findBooksbyBookIdsArray(
+    userId,
+    bookIdsArray,
+  );
+  const totalPages = booksFromBookIdsArray.reduce(
+    (acc, book) => acc + Number(book.pages),
+    0,
+  );
+  console.log(booksFromBookIdsArray);
 
   const newTrainig = await Training.create({
     ...body,
+    books: [...booksFromBookIdsArray],
     totalPages,
     readedPages: 0,
     statistics: [{ statisticDate, statisticResult: 0 }],

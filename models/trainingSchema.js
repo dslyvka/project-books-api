@@ -7,10 +7,10 @@ const booksSchema = Schema(
       type: SchemaTypes.ObjectId,
       required: [true, "Book's id is required"],
     },
-    pages: {
-      type: Number,
-      required: [true, "Book's pages are required"],
-    },
+    // pages: {
+    //   type: Number,
+    //   required: [true, "Book's pages are required"],
+    // },
     status: {
       type: String,
       enum: ['already', 'reading', 'going'],
@@ -55,9 +55,12 @@ const trainingSchema = Schema(
       required: [true],
     },
     books: {
-      type: [booksSchema],
+      type: Array,
       required: [true, 'Books are required'],
     },
+    // booksFromBookIdsArray: {
+    //   type: Array,
+    // },
 
     status: {
       type: String,
@@ -77,10 +80,10 @@ const trainingSchema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-const books = Joi.object({
-  id: Joi.string().required(),
-  pages: Joi.number().min(1).required(),
-});
+// const books = Joi.object({
+//   id: Joi.string().required(),
+//   // pages: Joi.number().min(1).required(),
+// });
 const statistic = Joi.object({
   statisticDate: Joi.date().required(),
   statisticResult: Joi.number(),
@@ -89,7 +92,8 @@ const statistic = Joi.object({
 const trainingJoiSchema = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
-  books: Joi.array().items(books),
+  books: Joi.array(),
+  // books: Joi.array().items(books),
   status: Joi.string().valueOf('active', 'done'),
   statistics: Joi.array().items(statistic),
 });
