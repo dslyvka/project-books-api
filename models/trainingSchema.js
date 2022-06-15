@@ -1,24 +1,24 @@
 const { Schema, model, SchemaTypes } = require('mongoose');
 const Joi = require('joi');
 
-const booksSchema = Schema(
-  {
-    id: {
-      type: SchemaTypes.ObjectId,
-      required: [true, "Book's id is required"],
-    },
-    // pages: {
-    //   type: Number,
-    //   required: [true, "Book's pages are required"],
-    // },
-    status: {
-      type: String,
-      enum: ['already', 'reading', 'going'],
-      default: 'reading',
-    },
-  },
-  { versionKey: false, _id: false },
-);
+// const booksSchema = Schema(
+//   {
+//     id: {
+//       type: SchemaTypes.ObjectId,
+//       required: [true, "Book's id is required"],
+//     },
+//     // pages: {
+//     //   type: Number,
+//     //   required: [true, "Book's pages are required"],
+//     // },
+//     status: {
+//       type: String,
+//       enum: ['already', 'reading', 'going'],
+//       default: 'reading',
+//     },
+//   },
+//   { versionKey: false, _id: false },
+// );
 const statisticSchema = new Schema(
   {
     statisticDate: {
@@ -58,9 +58,6 @@ const trainingSchema = Schema(
       type: Array,
       required: [true, 'Books are required'],
     },
-    // booksFromBookIdsArray: {
-    //   type: Array,
-    // },
 
     status: {
       type: String,
