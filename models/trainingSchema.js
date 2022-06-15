@@ -1,7 +1,6 @@
 const { Schema, model, SchemaTypes } = require('mongoose');
 const Joi = require('joi');
 
-
 // const booksSchema = Schema(
 //   {
 //     id: {
@@ -21,14 +20,11 @@ const Joi = require('joi');
 //   { versionKey: false, _id: false },
 // );
 
-
 const statisticSchema = new Schema(
   {
     statisticDate: {
       type: Date,
       default: new Date(),
-
-      // required: [true, ' statisticDate date is required'],
     },
     statisticResult: {
       type: Number,

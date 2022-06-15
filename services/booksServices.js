@@ -80,16 +80,19 @@ const findBookByOwnerAndStatus = async (userId, status) => {
   return book;
 };
 
+// Находит книги в базе по полю owner и массиву id
 const findBooksbyBookIdsArray = async (userId, bookIdsArray) => {
   const books = await Book.find({ owner: userId, _id: { $in: bookIdsArray } });
   return books;
 };
 
-const changeBooksStatus = async (userId, bookIdsArray, status) =>
+// Находит книги в базе по полю owner и массиву id  и изменяет статус книг
+const changeBooksStatus = async (userId, bookIdsArray, status) => {
   await Book.find({
     owner: userId,
     _id: { $in: bookIdsArray },
   }).updateMany({ status });
+};
 
 // Удаляет книгу
 const removeBook = async (userId, bookId) => {
