@@ -1,16 +1,32 @@
 const { Training } = require('../models/trainingSchema');
+const {
+  changeBooksStatus,
+  findBooksbyBookIdsArray,
+} = require('./booksServices');
 
 const addTraining = async (userId, body) => {
   const { startDate: statisticDate, books } = body;
-  const totalPages = books.reduce((acc, book) => acc + book.pages, 0);
+
+  const bookIdsArray = books.map(book => book.id);
+  const booksFromBookIdsArray = await findBooksbyBookIdsArray(
+    userId,
+    bookIdsArray,
+  );
+  const totalPages = booksFromBookIdsArray.reduce(
+    (acc, book) => acc + Number(book.pages),
+    0,
+  );
+  console.log(booksFromBookIdsArray);
+
   const newTrainig = await Training.create({
     ...body,
+    books: [...booksFromBookIdsArray],
     totalPages,
     readedPages: 0,
     statistics: [{ statisticDate, statisticResult: 0 }],
     owner: userId,
   });
-
+  await changeBooksStatus(userId, bookIdsArray, 'reading');
   return newTrainig;
 };
 
@@ -41,14 +57,57 @@ const findTrainingByOwnerAndStatus = async (userId, status) => {
 };
 // Обновление стистики тренировки
 const updateStatistic = async (userId, statisticDate, statisticResult) => {
+  console.log(userId);
   const training = await findTrainingByOwnerAndStatus(userId, 'active');
   if (!training) throw new Error('Training not Found');
 
-  const { totalPages, statistics, readedPages } = training;
+  const { books, totalPages, statistics, readedPages, endDate } = training;
   const updatedReadedPages = readedPages + statisticResult;
   statistics.push({ statisticDate, statisticResult });
+  // 'canceled';
+
+  if (
+    endDate.getTime() <
+    statistics[statistics.length - 1].statisticDate.getTime()
+  ) {
+    const bookIdsArray = [];
+    books.map(book => {
+      if (book.status === 'reading') {
+        bookIdsArray.push(book.id);
+      }
+
+      return bookIdsArray;
+    });
+    await changeBooksStatus(userId, bookIdsArray, 'going');
+
+    const canceledTraining = await Training.findByIdAndUpdate(
+      { owner: userId, status: 'active' },
+      {
+        readedPages: totalPages,
+        status: 'canceled',
+        statistics,
+      },
+      { new: true },
+    );
+    return canceledTraining;
+  }
 
   if (updatedReadedPages >= totalPages) {
+    const bookIds = [];
+
+    if (updatedReadedPages >= totalPages) {
+      books.map(book => {
+        if (book.status !== 'already') {
+          bookIds.push(book.id);
+        }
+        return bookIds;
+      });
+    }
+
+    if (bookIds.length) {
+      await changeBooksStatus(userId, bookIds, 'already');
+    }
+
     const doneTraining = await Training.findOneAndUpdate(
       { owner: userId, status: 'active' },
       {
@@ -61,7 +120,7 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
     return doneTraining;
   }
 
-  const updatedTraining = Training.findOneAndUpdate(
+  const updatedTraining = await Training.findOneAndUpdate(
     { owner: userId, status: 'active' },
     { readedPages: updatedReadedPages, statistics },
     { new: true },
