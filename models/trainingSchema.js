@@ -30,6 +30,10 @@ const trainingSchema = Schema(
       type: Number,
       required: [true],
     },
+    readBookPages: {
+      type: Number,
+      default: 0,
+    },
     totalPages: {
       type: Number,
       required: [true],
