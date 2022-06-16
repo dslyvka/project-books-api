@@ -1,25 +1,6 @@
 const { Schema, model, SchemaTypes } = require('mongoose');
 const Joi = require('joi');
 
-// const booksSchema = Schema(
-//   {
-//     id: {
-//       type: SchemaTypes.ObjectId,
-//       required: [true, "Book's id is required"],
-//     },
-//     // pages: {
-//     //   type: Number,
-//     //   required: [true, "Book's pages are required"],
-//     // },
-//     status: {
-//       type: String,
-//       enum: ['already', 'reading', 'going'],
-//       default: 'reading',
-//     },
-//   },
-//   { versionKey: false, _id: false },
-// );
-
 const statisticSchema = new Schema(
   {
     statisticDate: {
@@ -53,6 +34,7 @@ const trainingSchema = Schema(
       type: Number,
       required: [true],
     },
+
     books: {
       type: Array,
       required: [true, 'Books are required'],
@@ -68,6 +50,12 @@ const trainingSchema = Schema(
       type: [statisticSchema],
       required: [true, 'results is required'],
     },
+
+    bookNumber: {
+      type: Number,
+      default: 0,
+    },
+
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
@@ -76,10 +64,6 @@ const trainingSchema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-// const books = Joi.object({
-//   id: Joi.string().required(),
-//   // pages: Joi.number().min(1).required(),
-// });
 const statistic = Joi.object({
   statisticDate: Joi.date().required(),
   statisticResult: Joi.number(),
@@ -89,7 +73,6 @@ const trainingJoiSchema = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
   books: Joi.array(),
-  // books: Joi.array().items(books),
   status: Joi.string().valueOf('active', 'done'),
   statistics: Joi.array().items(statistic),
 });
