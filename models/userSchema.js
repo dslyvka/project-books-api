@@ -10,7 +10,7 @@ const userSchema = Schema(
       min: [3, 'Too short name'],
       max: [100, 'Too long name'],
       match: [
-        /^[^\s~!@#$%^&*()][\w\d\s!А-Яа-я@#$%^&*()]{3,100}$/,
+        /^[^\s~!@#$%^&*()][\w\d\s!А-Яа-яіІїЇєЄ@#$%^&*()]{3,100}$/,
         'Please fill a valid name',
       ],
     },
@@ -61,7 +61,7 @@ const joiSchema = Joi.object({
 
 const joiSignUpSchema = Joi.object({
   name: Joi.string()
-    .pattern(/^[^\s~!@#$%^&*()][\w\d\s!а-яА-я@#$%^&*()]{3,100}$/)
+    .pattern(/^[^\s~!@#$%^&*()][\w\d\s!а-яА-яіІїЇєЄ@#$%^&*()]{3,100}$/)
     .min(3)
     .max(100)
     .required(),
