@@ -2,7 +2,7 @@ const {
   addTraining,
   updateReadedPages,
   findTrainingByOwnerAndStatus,
-  updateStatistic,
+  updatedTrainingAndStatistic,
 } = require('../services/trainingServices');
 
 const addTrainings = async (req, res) => {
@@ -37,7 +37,7 @@ const addReadedPages = async (req, res) => {
 const updateTrainingStatistic = async (req, res) => {
   const userId = req.user._id;
   const { statisticDate, statisticResult } = req.body;
-  const training = await updateStatistic(
+  const training = await updatedTrainingAndStatistic(
     userId,
     statisticDate,
     statisticResult,
