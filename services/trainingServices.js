@@ -65,10 +65,18 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
   const training = await findTrainingByOwnerAndStatus(userId, 'active');
   if (!training) throw new Error('Training not Found');
 
-  const { books, totalPages, statistics, readedPages, endDate, bookNumber } =
-    training;
+  const {
+    books,
+    totalPages,
+    statistics,
+    readedPages,
+    endDate,
+    bookNumber,
+    readBookPages,
+  } = training;
 
   const totalReadedPages = readedPages + statisticResult;
+  let totalReadBookPages = readBookPages + statisticResult;
   statistics.push({ statisticDate, statisticResult });
 
   if (
@@ -98,6 +106,8 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
         status: 'canceled',
         statistics,
         books: [...booksFromBookIdsArray],
+        bookNumber: training.bookNumber,
+        readBookPages: totalReadBookPages,
       },
       { new: true },
     );
@@ -128,27 +138,31 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
         status: 'done',
         statistics,
         books: [...booksFromBookIdsArray],
+        bookNumber: training.bookNumber,
+        readBookPages: totalReadBookPages,
       },
       { new: true },
     );
     return doneTraining;
   }
 
-  //  const totalReadedPages = readedPages + statisticResult;
+  //  const totalReadBookPages=  readBookPages  + statisticResult;
+  //
   // ------------------------------------------------------------------
-  if (totalReadedPages >= books[bookNumber].pages) {
+  if (totalReadBookPages >= books[bookNumber].pages) {
     training.bookNumber = bookNumber + 1;
     books[bookNumber].status = 'already';
-    training.readedPages = 0;
+    totalReadBookPages = 0;
   }
 
   const updatedTraining = await Training.findOneAndUpdate(
     { owner: userId, status: 'active' },
     {
-      readedPages,
+      readedPages: totalReadedPages,
       statistics,
       books,
       bookNumber: training.bookNumber,
+      readBookPages: totalReadBookPages,
     },
     { new: true },
   );
