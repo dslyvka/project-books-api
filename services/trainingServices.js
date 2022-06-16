@@ -50,6 +50,7 @@ const updateReadedPages = async (userId, trainingId, readedPages) => {
 };
 
 // Находит тренировку в базе по id
+
 const findTrainingById = async id => {
   const training = await Training.findById(id);
   return training;
@@ -60,8 +61,12 @@ const findTrainingByOwnerAndStatus = async (userId, status) => {
   const training = await Training.findOne({ owner: userId, status });
   return training;
 };
-// Обновление стистики тренировки
-const updateStatistic = async (userId, statisticDate, statisticResult) => {
+// Обновление  тренировки и статистики
+const updatedTrainingAndStatistic = async (
+  userId,
+  statisticDate,
+  statisticResult,
+) => {
   const training = await findTrainingByOwnerAndStatus(userId, 'active');
   if (!training) throw new Error('Training not Found');
 
@@ -114,10 +119,16 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
     return failedTraining;
   }
 
+  if (totalReadBookPages >= books[bookNumber].pages) {
+    training.bookNumber = bookNumber + 1;
+    books[bookNumber].status = 'already';
+    totalReadBookPages = 0;
+  }
+
   if (totalReadedPages >= totalPages) {
     const bookIds = [];
     books.map(book => {
-      if (book.status === 'reading') {
+      if (book.status) {
         bookIds.push(book._id);
       }
       return bookIds;
@@ -130,29 +141,20 @@ const updateStatistic = async (userId, statisticDate, statisticResult) => {
       userId,
       bookIds,
     );
-
+    console.log(booksFromBookIdsArray);
     const doneTraining = await Training.findOneAndUpdate(
       { owner: userId, status: 'active' },
       {
         readedPages: totalPages,
         status: 'done',
         statistics,
-        books: [...booksFromBookIdsArray],
+        books,
         bookNumber: training.bookNumber,
         readBookPages: totalReadBookPages,
       },
       { new: true },
     );
     return doneTraining;
-  }
-
-  //  const totalReadBookPages=  readBookPages  + statisticResult;
-  //
-  // ------------------------------------------------------------------
-  if (totalReadBookPages >= books[bookNumber].pages) {
-    training.bookNumber = bookNumber + 1;
-    books[bookNumber].status = 'already';
-    totalReadBookPages = 0;
   }
 
   const updatedTraining = await Training.findOneAndUpdate(
@@ -176,5 +178,5 @@ module.exports = {
   getTraining,
   findTrainingById,
   findTrainingByOwnerAndStatus,
-  updateStatistic,
+  updatedTrainingAndStatistic,
 };
