@@ -16,7 +16,7 @@ const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
-app.use(cors());
+app.use(cors({ origin: "https://project-books.netlify.app/", credentials: true }));
 app.use(express.json());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
