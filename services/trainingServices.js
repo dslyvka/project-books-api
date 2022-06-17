@@ -81,7 +81,7 @@ const updatedTrainingAndStatistic = async (
   } = training;
 
   const totalReadedPages = readedPages + statisticResult;
-  let totalReadBookPages = readBookPages + statisticResult;
+  const totalReadBookPages = readBookPages + statisticResult;
   statistics.push({ statisticDate, statisticResult });
 
   if (
@@ -111,18 +111,32 @@ const updatedTrainingAndStatistic = async (
         status: 'canceled',
         statistics,
         books: [...booksFromBookIdsArray],
-        bookNumber: training.bookNumber,
-        readBookPages: totalReadBookPages,
+        // bookNumber: training.bookNumber,
+        // readBookPages: totalReadBookPages,
       },
       { new: true },
     );
     return failedTraining;
   }
+  // if (totalReadBookPages >= books[bookNumber].pages) {
+  //   training.bookNumber = bookNumber + 1;
+  //   books[bookNumber].status = 'already';
+  //   totalReadBookPages = 0;
+  // }
 
-  if (totalReadBookPages >= books[bookNumber].pages) {
-    training.bookNumber = bookNumber + 1;
-    books[bookNumber].status = 'already';
-    totalReadBookPages = 0;
+  if (totalReadedPages > 0) {
+    let counter = totalReadedPages;
+    console.log(books);
+    books.forEach(async book => {
+      if (counter >= book.pages) {
+        counter -= book.pages;
+
+        if (book.status === 'reading') {
+          book.status = 'already';
+          await changeBooksStatus(userId, book._id, 'already');
+        }
+      }
+    });
   }
 
   if (totalReadedPages >= totalPages) {
@@ -134,9 +148,9 @@ const updatedTrainingAndStatistic = async (
       return bookIds;
     });
 
-    if (bookIds.length) {
-      await changeBooksStatus(userId, bookIds, 'already');
-    }
+    // if (bookIds.length) {
+    //   await changeBooksStatus(userId, bookIds, 'already');
+    // }
     const booksFromBookIdsArray = await findBooksbyBookIdsArray(
       userId,
       bookIds,
