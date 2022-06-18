@@ -111,7 +111,7 @@ const updatedTrainingAndStatistic = async (
         status: 'canceled',
         statistics,
         books: [...booksFromBookIdsArray],
-        // bookNumber: training.bookNumber,
+        bookNumber: training.bookNumber,
         // readBookPages: totalReadBookPages,
       },
       { new: true },
@@ -133,6 +133,7 @@ const updatedTrainingAndStatistic = async (
 
         if (book.status === 'reading') {
           book.status = 'already';
+          training.bookNumber = bookNumber + 1;
           await changeBooksStatus(userId, book._id, 'already');
         }
       }
